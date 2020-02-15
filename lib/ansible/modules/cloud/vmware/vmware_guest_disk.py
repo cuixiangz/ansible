@@ -372,10 +372,7 @@ class PyVmomiHelper(PyVmomi):
         disk_spec.device.controllerKey = scsi_ctl_key
         disk_spec.device.unitNumber = disk_index
 
-        if disk_filename is not None:
-            disk_spec.device.backing.fileName = disk_filename
-        else:
-            disk_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+        disk_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
 
         return disk_spec
 
@@ -476,8 +473,7 @@ class PyVmomiHelper(PyVmomi):
             if disk['disk_unit_number'] not in current_scsi_info[scsi_controller]['disks'] and disk['state'] == 'present':
                 # Add new disk
                 disk_spec = self.create_scsi_disk(scsi_controller, disk['disk_unit_number'], disk['disk_mode'], disk['filename'])
-                if disk['filename'] is None:
-                    disk_spec.device.capacityInKB = disk['size']
+                disk_spec.device.capacityInKB = disk['size']
                 if disk['disk_type'] == 'thin':
                     disk_spec.device.backing.thinProvisioned = True
                 elif disk['disk_type'] == 'eagerzeroedthick':
